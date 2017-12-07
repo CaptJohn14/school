@@ -1,0 +1,26 @@
+#------------------------------------------------------------------------------
+# Name: Johnson Le
+# cruzID: jonle
+# id number: 1512346
+# File Name: Makefile2
+# Description: Make for FileCopy
+#------------------------------------------------------------------------------
+
+JAVASRC    = FileCopy.java
+SOURCES    = README Makefile $(JAVASRC)
+MAINCLASS  = FileCopy
+CLASSES    = FileCopy.class
+JARFILE    = FileCopy.jar
+
+all: $(JARFILE)
+
+$(JARFILE): $(CLASSES)
+	echo Main-class: $(MAINCLASS) > Manifest
+	jar cvfm $(JARFILE) Manifest $(CLASSES)
+	rm Manifest
+
+$(CLASSES): $(JAVASRC)
+	javac -Xlint $(JAVASRC)
+
+clean:
+	rm $(CLASSES) $(JARFILE)

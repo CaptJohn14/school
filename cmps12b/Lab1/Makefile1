@@ -1,0 +1,19 @@
+#------------------------------------------------------------------
+# Name: Johnson Le
+# cruzID: jonle
+# id number: 1512346
+# File Name: Makefile1
+# Description: basically makes class and a .jar file to to run
+#------------------------------------------------------------------
+
+# A simple Makefile
+HelloUser: HelloUser.class
+	echo Main-class: HelloUser > Manifest
+	jar cvfm HelloUser.jar Manifest HelloUser.class
+	rm Manifest
+
+HelloUser.class: HelloUser.java
+	javac -Xlint HelloUser.java
+
+clean:
+	rm -f HelloUser.jar HelloUser.class
