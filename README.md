@@ -1,2 +1,2 @@
-# school
-school
+# Assignments from school.
+Johnson Le
