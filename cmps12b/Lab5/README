@@ -1,0 +1,16 @@
+Name: Johnson Le
+cruzID: jonle
+student ID#: 1512346
+
+Lab5:
+Working with separate source and header was kinda tricky and took awhile to
+figure out. I had to look at my old projects in c. I ran across a lot of
+segment faults but slowly but surely ironed them out. I mostly did trial an
+error with a little googling and stack overflow for some things.
+
+Submitting the following:
+     queue.c
+     queue.h
+     queueClient.c
+     Makefile
+     README
