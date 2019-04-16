@@ -6,8 +6,7 @@
 # ==============================================================================
  # !/bin/bash
 for file in *; do           #iterates all the files
-    while read -r line; do  #reads a line
-        read -r line        #reads again. Basically ignores the last read.
+    while read -r line && read -r line; do  #reads a line twice. so evens.
         echo ""$file": "$line""
     done < "$file"
 done
