@@ -1,0 +1,4 @@
+﻿"MDF"= .2
+"Foamcore"= .1
+"GMaterial"= "MDF"
+"CutDistance" = .1

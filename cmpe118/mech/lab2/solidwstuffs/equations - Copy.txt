@@ -1,0 +1,3 @@
+﻿"MDF"= .3
+"Foamcore"= .1
+"GMaterial"= .3
