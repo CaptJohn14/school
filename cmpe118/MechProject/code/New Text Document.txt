@@ -1,0 +1,32 @@
+                    //                    if (obstacleflag == 1) {
+                    //                        if (rightturnfirst == 1) {
+                    //                            ES_Timer_InitTimer(TRACKFRB_TIMER, NINETY_DEGREE_TICKS);
+                    //                            nextState = OBSTACLE_BACK_LTF;
+                    //                            makeTransition = TRUE;
+                    //                            ThisEvent.EventType = ES_NO_EVENT;
+                    //                            break;
+                    //                        } else if (leftturnfirst == 1) {
+                    //                            ES_Timer_InitTimer(TRACKFLB_TIMER, NINETY_DEGREE_TICKS);
+                    //                            nextState = OBSTACLE_BACK_RTF;
+                    //                            makeTransition = TRUE;
+                    //                            ThisEvent.EventType = ES_NO_EVENT;
+                    //                            break;
+                    //                        }
+                    //                    } else {
+//                    if (ThisEvent.EventParam & FB_TAPE_MASK) {
+                        if (ThisEvent.EventParam & LEFT_TAPE_MASK) {
+                            nextState = RIGHT_TURN_FIRST;
+                            makeTransition = TRUE;
+                            ThisEvent.EventType = ES_NO_EVENT;
+                            break;
+                        } else if (ThisEvent.EventParam & RIGHT_TAPE_MASK) {
+                            nextState = LEFT_TURN_FIRST;
+                            makeTransition = TRUE;
+                            ThisEvent.EventType = ES_NO_EVENT;
+                            break;
+                        }
+//                    } else {
+//                        Motors_SetBoth(Moving_Speed);
+//                        break;
+//                    }
+                    //  
