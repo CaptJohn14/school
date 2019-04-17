@@ -6,7 +6,7 @@
 # ==============================================================================
  # !/bin/bash
 for file in *; do           #iterates all the files
-    while read -r line && read -r line; do  #reads a line twice. so evens.
-        echo ""$file": "$line""
-    done < "$file"
+    while read -r line && read -r line; do  #reads 2 lines. This skips odds
+        echo ""$file": "$line""     #print file name followed by line content
+    done < "$file"      #the file that is being read
 done
