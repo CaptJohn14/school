@@ -1,0 +1,3 @@
+To run the controller, place lab3controller.py in the ~/pox/pox/misc directory. You can then
+launch the controller with the command sudo ~/pox/pox.py misc.lab3controller
+To run the mininet file, place it in ~ and run the command sudo python ~/lab3.py
