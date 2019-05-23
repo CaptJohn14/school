@@ -1,10 +1,6 @@
-###########################################
-# Name: Johnson Le
-# Desc: Firewall to allow only ARP and TCP.
-#       Most of the code was provided. The
-#       Modified part is do_firewall
-###########################################
-
+# Lab 3 Skeleton
+#
+# Based on of_tutorial by James McCauley
 
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
@@ -26,23 +22,7 @@ class Firewall (object):
 
   def do_firewall (self, packet, packet_in):
     # The code in here will be executed for every packet.
-    fm = of.ofp_flow_mod()
-    fm.match = of.ofp_match.from_packet(packet)
-    fm.idle_timeout = 25
-    fm.hard_timeout = 50
-
-    if (fm.match.dl_type == 0x0806) or (fm.match.dl_type == 0x0800 and fm.match.nw_proto == 6):  #check ARP first cause can be any ip
-##      print("DL: {}   ||   PROTO: {}".format(fm.match.dl_type, fm.match.nw_proto))
-##      print("hello")
-      fm.actions.append(of.ofp_action_output(port = of.OFPP_ALL))
-      self.connection.send(fm)
-      
-    else:
-##      print("bleep bloop, not ARP or TCP")
-      self.connection.send(fm)
-      
-  
-  
+    print "Example Code."
 
   def _handle_PacketIn (self, event):
     """
