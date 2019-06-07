@@ -12,9 +12,9 @@
 #
 # Important Note: the "is" comparison DOES NOT work for IP address
 # comparisons in this way. You must use ==.
-# 
+#
 # To send an OpenFlow Message telling a switch to send packets out a
-# port, do the following, replacing <PORT> with the port number the 
+# port, do the following, replacing <PORT> with the port number the
 # switch should send the packets out:
 #
 #    msg = of.ofp_flow_mod()
@@ -48,14 +48,41 @@ class Final (object):
     connection.addListeners(self)
 
   def do_final (self, packet, packet_in, port_on_switch, switch_id):
-    # This is where you'll put your code. The following modifications have 
+    # This is where you'll put your code. The following modifications have
     # been made from Lab 3:
     #   - port_on_switch: represents the port that the packet was received on.
     #   - switch_id represents the id of the switch that received the packet.
     #      (for example, s1 would have switch_id == 1, s2 would have switch_id == 2, etc...)
-    # You should use these to determine where a packet came from. To figure out where a packet 
+    # You should use these to determine where a packet came from. To figure out where a packet
     # is going, you can use the IP header information.
-    print "Example code."
+
+    #Allow traffic between all hosts. block untrusted traffic to server.
+    
+    msg = of.ofp_flow_mod()
+    msg.match = of.ofp_match.from_packet(packet)
+##    msg.idle_timeout = 30
+##    msg.hard_timeout = 30
+    port_ho = 1
+    port_sw = 2
+
+    ip_header = packet.find('ipv4')
+
+    if ip_header != None:
+      print("port: {}   ||   sw_id: {}   ||   srcip: {}   ||   dstip: {}".format(port_on_switch, switch_id, ip_header.srcip, ip_header.dstip))
+      if switch_id == 1:
+        pass
+      elif switch_id == 2:
+        pass
+      elif switch_id == 3:
+        pass
+      elif switch_id == 4:
+        pass
+      elif switch_id == 5:
+        pass
+
+    else:
+      msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
+      self.connection.send(msg)
 
   def _handle_PacketIn (self, event):
     """
