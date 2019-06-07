@@ -49,10 +49,10 @@ class final_topo(Topo):
     h5 = self.addHost('h5',mac='00:00:00:00:00:05',ip='10.5.5.50/24', defaultRoute="h5-eth0")
 
     #create links between switches
-    self.addLink(s1,s4, port1=2, port2=2)
-    self.addLink(s2,s4, port1=2, port2=3)
-    self.addLink(s3,s4, port1=2, port2=4)
-    self.addLink(s5,s4, port1=2, port2=5)
+    self.addLink(s1,s4, port1=2, port2=3)
+    self.addLink(s2,s4, port1=2, port2=4)
+    self.addLink(s3,s4, port1=2, port2=5)
+    self.addLink(s5,s4, port1=2, port2=6)
 
     #create links between host to switch
     self.addLink(s1, h1, port1=1, port2=0)
