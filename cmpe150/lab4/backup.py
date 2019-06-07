@@ -61,22 +61,62 @@ class Final (object):
     #goal: block h4 to h5. block any icmp with src=h4
     msg = of.ofp_flow_mod()
     msg.match = of.ofp_match.from_packet(packet)
-##    msg.idle_timeout = 30
-##    msg.hard_timeout = 30
+    msg.idle_timeout = 30
+    msg.hard_timeout = 30
     port_ho = 1
     port_sw = 2
 
     ip_header = packet.find('ipv4')
     icmp_header = packet.find('icmp')
-    block = False
-
-    #if icmp, technically ip as well
-    if icmp_header:
+    if ip_header:
+        print("port: {}   ||   sw_id: {}   ||   srcip: {}   ||   dstip: {}".format(port_on_switch, switch_id, ip_header.srcip, ip_header.dstip))
         if ip_header.srcip == "123.45.67.89":
-            block = True
+            if ip_header.dstip == "10.5.5.50":
+                print("Blocked: h4 to h5")
+                msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
+            elif icmp_header:
+                print("Blocked: ICMP and src h4")
+                msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
+            else:
+                print("Allow: Not h4->h5 and not ICMP with src h4")
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+        if switch_id == 4:
+            if ip_header.dstip == "123.45.67.89":
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            elif ip_header.dstip == "10.1.1.10":
+                msg.actions.append(of.ofp_action_output(port = 2))
+            elif ip_header.dstip == "10.2.2.20":
+                msg.actions.append(of.ofp_action_output(port = 3))
+            elif ip_header.dstip == "10.3.3.30":
+                msg.actions.append(of.ofp_action_output(port = 4))
+            elif ip_header.dstip == "10.5.5.50":
+                msg.actions.append(of.ofp_action_output(port = 5))
+            else:
+                print("ON SW4 but NOTHING!!! Probably never reach here.")
+        elif switch_id == 1:
+            if ip_header.dstip == "10.1.1.10":
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+        elif switch_id == 2:
+            if ip_header.dstip == "10.2.2.20":
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+        elif switch_id == 3:
+            if ip_header.dstip == "10.3.3.30":
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+        elif switch_id == 5:
+            if ip_header.dstip == "10.5.5.50":
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+
     else:
         msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
-        self.connection.send(msg)
+    self.connection.send(msg)
 
   def _handle_PacketIn (self, event):
     """
