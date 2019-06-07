@@ -61,11 +61,9 @@ class Final (object):
         ip_header = packet.find('ipv4')
         icmp_header = packet.find('icmp')
 
+        #I ignore all non-IP packets.
         if ip_header:
-##            print("port: {}   ||   sw_id: {}   ||   srcip: {}   ||   dstip: {}".format(port_on_switch, switch_id, ip_header.srcip, ip_header.dstip))
-##            if ip_header.srcip == "123.45.67.89" and (icmp_header or ip_header.dstip == "10.5.5.50"):
-##                print("BLOCKED")
-##                self.send_packet(packet, packet_in, of.OFPP_FLOOD)
+            #Make sure that ICMP with src=h4 can't go through. Also make sure h4 can't connect to h5
             if ip_header.srcip == "123.45.67.89":
                 if ip_header.dstip == "10.5.5.50":
                     print("BLOCKED: srcip: {} --> dstip: {}".format(ip_header.srcip, ip_header.dstip))
@@ -76,8 +74,10 @@ class Final (object):
             else:
                 self.do_helper(ip_header.dstip, switch_id, packet, packet_in)
         else:
-            self.send_packet(packet, packet_in, of.OFPP_FLOOD)
+            self.send_packet(packet, packet_in, of.OFPP_ALL)
 
+    # this function just houses the big if, elif, and else statements
+    # that decides what port the packet will go to.
     def do_helper(self, dstip, switch_id, packet, packet_in):
         port_SWequalH= 1
         port_GoToSW4 = 2
@@ -119,6 +119,7 @@ class Final (object):
             else:
                 self.send_packet(packet, packet_in, port_GoToSW4)
 
+    # function to send out the packet with given port
     def send_packet(self, packet, packet_in, port):
         msg = of.ofp_flow_mod()
         msg.match = of.ofp_match.from_packet(packet)
