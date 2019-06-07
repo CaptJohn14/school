@@ -57,32 +57,77 @@ class Final (object):
     # is going, you can use the IP header information.
 
     #Allow traffic between all hosts. block untrusted traffic to server.
-    
+
+    #goal: block h4 to h5. block any icmp with src=h4
     msg = of.ofp_flow_mod()
     msg.match = of.ofp_match.from_packet(packet)
-##    msg.idle_timeout = 30
-##    msg.hard_timeout = 30
+    ##    msg.idle_timeout = 30
+    ##    msg.hard_timeout = 30
     port_ho = 1
     port_sw = 2
 
     ip_header = packet.find('ipv4')
+    icmp_header = packet.find('icmp')
 
-    if ip_header != None:
-      print("port: {}   ||   sw_id: {}   ||   srcip: {}   ||   dstip: {}".format(port_on_switch, switch_id, ip_header.srcip, ip_header.dstip))
-      if switch_id == 1:
-        pass
-      elif switch_id == 2:
-        pass
-      elif switch_id == 3:
-        pass
-      elif switch_id == 4:
-        pass
-      elif switch_id == 5:
-        pass
+    if ip_header:
+        print("port: {}   ||   sw_id: {}   ||   srcip: {}   ||   dstip: {}".format(port_on_switch, switch_id, ip_header.srcip, ip_header.dstip))
+        if ip_header.srcip == "123.45.67.89":
+            if ip_header.dstip == "10.5.5.50" or icmp_header:
+                print("Blocked: h4 to h5 or ICMP and src h4"
+            else:
+                pass #then we let through.
+        elif switch_id == 4:
+            print("sw4!!!!")
+            if ip_header.dstip == "123.45.67.89":
+                print("sw4 to h4")
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            elif ip_header.dstip == "10.1.1.10":
+                print("sw4 to h1")
+                msg.actions.append(of.ofp_action_output(port = 2))
+            elif ip_header.dstip == "10.2.2.20":
+                print("sw4 to h2")
+                msg.actions.append(of.ofp_action_output(port = 3))
+            elif ip_header.dstip == "10.3.3.30":
+                print("sw4 to h3")
+                msg.actions.append(of.ofp_action_output(port = 4))
+            elif ip_header.dstip == "10.5.5.50":
+                print("sw4 to h5")
+                msg.actions.append(of.ofp_action_output(port = 5))
+            else:
+                print("ON SW4 but NOTHING!!!")
+            self.connection.send(msg)
+        elif switch_id == 1:
+            if ip_header.dstip == "10.1.1.10":
+                print("sw1 to h1")
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+            self.connection.send(msg)
+        elif switch_id == 2:
+            if ip_header.dstip == "10.2.2.20":
+                print("sw2 to h2")
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+            self.connection.send(msg)
+        elif switch_id == 3:
+            if ip_header.dstip == "10.3.3.30":
+                print("sw3 to h3")
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+            self.connection.send(msg)
+        elif switch_id == 5:
+            if ip_header.dstip == "10.5.5.50":
+                print("sw5 to h5")
+                msg.actions.append(of.ofp_action_output(port = port_ho))
+            else:
+                msg.actions.append(of.ofp_action_output(port = port_sw))
+            self.connection.send(msg)
 
     else:
-      msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
-      self.connection.send(msg)
+        msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
+        self.connection.send(msg)
 
   def _handle_PacketIn (self, event):
     """
